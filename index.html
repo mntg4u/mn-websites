@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Powered Dashboard</title>
+    <title>AI Dashboard with Terabox Downloader and Image Generator</title>
     <style>
         /* General Styles */
         body {
@@ -37,27 +37,6 @@
             padding: 20px;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
         /* Widgets */
         .widget {
             margin: 20px 0;
@@ -66,7 +45,6 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             background: rgba(0, 0, 0, 0.6);
             transition: transform 0.3s ease, background 0.3s ease;
-            animation: slideUp 1.5s ease;
         }
 
         .widget:hover {
@@ -79,69 +57,8 @@
             margin-bottom: 15px;
         }
 
-        /* Weather Section */
-        .weather {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .weather img {
-            width: 80px;
-        }
-
-        /* Task Management */
-        .task {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .task input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            font-size: 1rem;
-            border: 2px solid #fff;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            outline: none;
-        }
-
-        .task button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background: #3498db;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .task button:hover {
-            background: #2980b9;
-        }
-
-        .task ul {
-            margin-top: 10px;
-            list-style: none;
-        }
-
-        .task ul li {
-            padding: 10px;
-            margin: 5px 0;
-            background: #34495e;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* AI Widgets */
-        .ai-feature {
-            margin-top: 20px;
-        }
-
-        .ai-feature textarea, .ai-feature input {
+        /* Image Generator */
+        .image-generator input, .image-generator select {
             width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
@@ -153,24 +70,31 @@
             outline: none;
         }
 
-        .ai-feature button {
+        .image-generator button {
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
-            background: #e74c3c;
+            background: #2ecc71;
             color: #fff;
             cursor: pointer;
             transition: background 0.3s ease;
         }
 
-        .ai-feature button:hover {
-            background: #c0392b;
+        .image-generator button:hover {
+            background: #27ae60;
         }
 
-        /* AI Image Generator */
-        .ai-feature img {
+        .image-results {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-top: 15px;
-            max-width: 100%;
+            justify-content: center;
+        }
+
+        .image-results img {
+            width: 200px;
+            height: auto;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
@@ -198,44 +122,27 @@
 </head>
 <body>
     <header>
-        <h1>AI-Powered Dashboard</h1>
+        <h1>AI Dashboard with Terabox Downloader and Image Generator</h1>
     </header>
 
     <div class="container">
-        <!-- Weather Widget -->
-        <div class="widget weather">
-            <div>
-                <h3>Current Weather</h3>
-                <p>Temperature: <span id="temperature">--</span>°C</p>
-            </div>
-            <img id="weather-icon" src="" alt="Weather Icon">
-        </div>
-
-        <!-- Task Management -->
-        <div class="widget task">
-            <div>
-                <h3>Tasks</h3>
-                <ul id="task-list"></ul>
-            </div>
-            <div>
-                <input type="text" id="task-input" placeholder="Add a task...">
-                <button onclick="addTask()">Add</button>
-            </div>
-        </div>
-
-        <!-- AI Features -->
-        <div class="widget ai-feature">
-            <h3>AI Chatbot</h3>
-            <textarea id="chat-input" placeholder="Ask me anything..."></textarea>
-            <button onclick="chatWithAI()">Send</button>
-            <p id="chat-response">Response: --</p>
-        </div>
-
-        <div class="widget ai-feature">
-            <h3>Image Generator</h3>
-            <input type="text" id="image-prompt" placeholder="Describe the image...">
-            <button onclick="generateImage()">Generate</button>
-            <img id="generated-image" src="" alt="Generated Image">
+        <!-- AI Image Generator -->
+        <div class="widget image-generator">
+            <h3>AI Image Generator</h3>
+            <input type="text" id="image-prompt" placeholder="Enter prompt (e.g., Batman)">
+            <input type="number" id="image-count" placeholder="Number of images (Max: 6)" min="1" max="6">
+            <select id="image-dimensions">
+                <option value="wide">Wide (1024×576)</option>
+                <option value="tall">Tall (576×1024)</option>
+                <option value="square">Square (768×768)</option>
+            </select>
+            <select id="image-safety">
+                <option value="true">Safe Mode</option>
+                <option value="false">NSFW Mode</option>
+            </select>
+            <button onclick="generateImages()">Generate Images</button>
+            <div id="loading" style="display: none;">Generating images, please wait...</div>
+            <div class="image-results" id="image-results"></div>
         </div>
     </div>
 
@@ -244,42 +151,45 @@
     </footer>
 
     <script>
-        // Weather Fetching Logic
-        async function fetchWeather() {
+        async function generateImages() {
+            const prompt = document.getElementById("image-prompt").value.trim();
+            const count = document.getElementById("image-count").value;
+            const dimensions = document.getElementById("image-dimensions").value;
+            const safety = document.getElementById("image-safety").value;
+            const loadingIndicator = document.getElementById("loading");
+            const imageResults = document.getElementById("image-results");
+
+            if (!prompt || !count || !dimensions) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            loadingIndicator.style.display = "block";
+            imageResults.innerHTML = ""; // Clear previous results
+
+            const apiUrl = `https://death-image.ashlynn.workers.dev/?prompt=${encodeURIComponent(
+                prompt
+            )}&image=${count}&dimensions=${dimensions}&safety=${safety}`;
+
             try {
-                const response = await fetch('https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=your_api_key');
+                const response = await fetch(apiUrl);
                 const data = await response.json();
-                document.getElementById('temperature').textContent = data.main.temp;
-                document.getElementById('weather-icon').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+
+                if (data.images && data.images.length > 0) {
+                    data.images.forEach((imageUrl) => {
+                        const img = document.createElement("img");
+                        img.src = imageUrl;
+                        img.alt = "Generated Image";
+                        imageResults.appendChild(img);
+                    });
+                } else {
+                    alert("No images were generated. Try different parameters.");
+                }
             } catch (error) {
-                console.error("Error fetching weather:", error);
+                alert("An error occurred while generating images.");
+            } finally {
+                loadingIndicator.style.display = "none";
             }
-        }
-        fetchWeather();
-
-        // Task Management
-        function addTask() {
-            const taskInput = document.getElementById("task-input");
-            const taskList = document.getElementById("task-list");
-            if (taskInput.value.trim()) {
-                const li = document.createElement("li");
-                li.textContent = taskInput.value;
-                li.addEventListener("click", () => li.remove());
-                taskList.appendChild(li);
-                taskInput.value = "";
-            }
-        }
-
-        // AI Chatbot
-        function chatWithAI() {
-            const chatInput = document.getElementById("chat-input");
-            document.getElementById("chat-response").textContent = `You asked: ${chatInput.value}`;
-        }
-
-        // Image Generator
-        function generateImage() {
-            const prompt = document.getElementById("image-prompt").value;
-            document.getElementById("generated-image").src = "https://via.placeholder.com/300";
         }
     </script>
 </body>
