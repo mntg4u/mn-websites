@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Dashboard with Terabox Downloader, Image Generator, ChatGPT Integration, and Terabox Video Downloader</title>
+    <title>AI Dashboard with Terabox Downloader, ChatGPT, and Image Generator</title>
     <style>
         /* General Styles */
         body {
@@ -12,6 +12,17 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #2c3e50, #4ca1af);
             color: #fff;
+            overflow-x: hidden;
+            animation: backgroundAnimation 5s infinite alternate;
+        }
+
+        @keyframes backgroundAnimation {
+            0% {
+                background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            }
+            100% {
+                background: linear-gradient(135deg, #34495e, #2980b9);
+            }
         }
 
         h1, h2 {
@@ -24,6 +35,7 @@
             margin-top: 20px;
             color: #f39c12;
             font-size: 2.5rem;
+            animation: bounce 2s infinite;
         }
 
         h2 {
@@ -31,6 +43,20 @@
             color: #e74c3c;
         }
 
+        /* Bounce Animation */
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Container for Widgets */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -41,10 +67,23 @@
         .widget {
             margin: 20px 0;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             background: rgba(0, 0, 0, 0.6);
             transition: transform 0.3s ease, background 0.3s ease;
+            border: 2px solid #f1c40f;
+            animation: fadeInWidget 1.5s ease-in-out;
+        }
+
+        @keyframes fadeInWidget {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .widget:hover {
@@ -55,11 +94,34 @@
         .widget h3 {
             color: #f1c40f;
             margin-bottom: 15px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
         }
 
-        /* Image Generator */
-        .image-generator input, .image-generator select {
-            width: calc(100% - 20px);
+        /* Button Styles */
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background: linear-gradient(145deg, #c0392b, #e74c3c);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(1);
+        }
+
+        /* Input Fields */
+        input, select {
+            width: 100%;
             padding: 10px;
             margin: 10px 0;
             font-size: 1rem;
@@ -68,28 +130,22 @@
             border: 2px solid #fff;
             color: #fff;
             outline: none;
+            transition: border-color 0.3s ease, transform 0.3s ease;
         }
 
-        .image-generator button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background: #2ecc71;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease;
+        input:focus, select:focus {
+            border-color: #f39c12;
+            transform: translateY(-5px);
         }
 
-        .image-generator button:hover {
-            background: #27ae60;
-        }
-
+        /* Image Generator Styles */
         .image-results {
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
             margin-top: 15px;
             justify-content: center;
+            animation: fadeInWidget 1.5s ease-in-out;
         }
 
         .image-results img {
@@ -97,98 +153,53 @@
             height: auto;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* ChatGPT Integration */
-        .chat-widget {
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        .image-results img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
         }
 
-        .chat-widget input, .chat-widget select {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 1rem;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #fff;
-            color: #fff;
-            outline: none;
-        }
-
-        .chat-widget button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background: #e74c3c;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .chat-widget button:hover {
-            background: #c0392b;
-        }
-
+        /* ChatGPT Result */
         .chat-result {
             margin-top: 20px;
             color: #f1c40f;
             font-size: 1.1rem;
+            animation: fadeInWidget 1.5s ease-in-out;
         }
 
-        /* Terabox Video Downloader */
-        .terabox-widget {
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        /* Loading Animation */
+        #loading {
+            color: #f39c12;
+            font-size: 1.2rem;
+            text-align: center;
+            display: none;
+            animation: pulse 1.5s infinite;
         }
 
-        .terabox-widget input {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 1rem;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #fff;
-            color: #fff;
-            outline: none;
-        }
-
-        .terabox-widget button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background: #3498db;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .terabox-widget button:hover {
-            background: #2980b9;
-        }
-
-        .terabox-result {
-            margin-top: 20px;
-            color: #f1c40f;
-            font-size: 1.1rem;
+        @keyframes pulse {
+            0% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.8;
+            }
         }
 
         /* Footer */
         footer {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 40px;
             padding: 15px 0;
-            background: #2c3e50;
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
             font-size: 0.9rem;
+            position: relative;
+            z-index: 10;
         }
 
         footer a {
@@ -204,7 +215,7 @@
 </head>
 <body>
     <header>
-        <h1>AI Dashboard with Terabox Downloader, Image Generator, ChatGPT Integration, and Terabox Video Downloader</h1>
+        <h1>AI Dashboard with Terabox Downloader, ChatGPT, and Image Generator</h1>
     </header>
 
     <div class="container">
@@ -227,29 +238,30 @@
             <div class="image-results" id="image-results"></div>
         </div>
 
+        <!-- Terabox Video Downloader -->
+        <div class="widget">
+            <h3>Terabox Video Downloader</h3>
+            <input type="text" id="terabox-url" placeholder="Enter Terabox Video URL">
+            <button onclick="downloadTeraboxVideo()">Download Video</button>
+            <div id="terabox-result"></div>
+        </div>
+
         <!-- ChatGPT Integration -->
         <div class="widget chat-widget">
-            <h3>Ask ChatGPT</h3>
+            <h3>Ask Advanced ChatGPT</h3>
             <input type="text" id="chat-question" placeholder="Ask a question...">
             <select id="chat-state">
                 <option value="default">Select Mode</option>
-                <option value="girlfriend">Girlfriend Mode</option>
-                <option value="jarvis">Jarvis Mode</option>
-                <option value="zenith">Zenith Mode</option>
-                <option value="poet">Poet Mode</option>
+                <option value="stylist">Stylist Mode</option>
                 <option value="chef">Chef Mode</option>
+                <option value="prompt">Prompt Mode</option>
+                <option value="mental">Mental Mode</option>
+                <option value="poet">Poet Mode</option>
                 <option value="doctor">Doctor Mode</option>
+                <option value="generator">Generator Mode</option>
             </select>
             <button onclick="askQuestion()">Ask</button>
             <div class="chat-result" id="chat-result"></div>
-        </div>
-
-        <!-- Terabox Video Downloader -->
-        <div class="widget terabox-widget">
-            <h3>Terabox Video Downloader</h3>
-            <input type="text" id="terabox-url" placeholder="Enter Terabox Video URL or ID">
-            <button onclick="downloadTeraboxVideo()">Download Video</button>
-            <div class="terabox-result" id="terabox-result"></div>
         </div>
     </div>
 
@@ -258,6 +270,7 @@
     </footer>
 
     <script>
+        // AI Image Generator
         async function generateImages() {
             const prompt = document.getElementById("image-prompt").value.trim();
             const count = document.getElementById("image-count").value;
@@ -299,6 +312,35 @@
             }
         }
 
+        // Terabox Video Downloader
+        async function downloadTeraboxVideo() {
+            const videoUrl = document.getElementById("terabox-url").value.trim();
+            const resultDiv = document.getElementById("terabox-result");
+
+            if (!videoUrl) {
+                alert("Please enter a valid Terabox URL.");
+                return;
+            }
+
+            resultDiv.innerHTML = "Fetching download link...";
+
+            const apiUrl = `https://ashlynn.serv00.net/Ashlynnterabox.php/?url=${encodeURIComponent(videoUrl)}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data && data.download_link) {
+                    resultDiv.innerHTML = `<a href="${data.download_link}" target="_blank">Click here to download the video</a>`;
+                } else {
+                    resultDiv.innerHTML = "Failed to retrieve the download link.";
+                }
+            } catch (error) {
+                resultDiv.innerHTML = "An error occurred. Please try again later.";
+            }
+        }
+
+        // ChatGPT Integration
         async function askQuestion() {
             const question = document.getElementById("chat-question").value.trim();
             const state = document.getElementById("chat-state").value;
@@ -309,7 +351,12 @@
                 return;
             }
 
-            const apiUrl = `https://ashlynn.serv00.net/gpt4.php/?question=${encodeURIComponent(question)}&state=${state}`;
+            if (state === "default") {
+                alert("Please select a mode.");
+                return;
+            }
+
+            const apiUrl = `https://lord.ashlynn.workers.dev/?question=${encodeURIComponent(question)}&state=${state}`;
 
             chatResult.innerHTML = "Loading...";
 
@@ -317,40 +364,13 @@
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
-                if (data.answer) {
+                if (data && data.answer) {
                     chatResult.innerHTML = data.answer;
                 } else {
                     chatResult.innerHTML = "No answer found. Please try again.";
                 }
             } catch (error) {
                 chatResult.innerHTML = "An error occurred. Please try again later.";
-            }
-        }
-
-        async function downloadTeraboxVideo() {
-            const urlOrId = document.getElementById("terabox-url").value.trim();
-            const teraboxResult = document.getElementById("terabox-result");
-
-            if (!urlOrId) {
-                alert("Please enter a valid Terabox video URL or ID.");
-                return;
-            }
-
-            teraboxResult.innerHTML = "Fetching video download link...";
-
-            const apiUrl = `https://ashlynn.serv00.net/tera.php/?url=${encodeURIComponent(urlOrId)}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data && data.downloadLink) {
-                    teraboxResult.innerHTML = `Download Video: <a href="${data.downloadLink}" target="_blank">Click Here</a>`;
-                } else {
-                    teraboxResult.innerHTML = "No download link found. Please check the URL or ID.";
-                }
-            } catch (error) {
-                teraboxResult.innerHTML = "An error occurred. Please try again later.";
             }
         }
     </script>
